@@ -8,9 +8,11 @@
       // An MP3 plays on every phone and drives the live waveform.
       mp3: '',
       // Used when there is no MP3. Plays through SoundCloud's own player.
-      soundcloud: 'https://soundcloud.com/jamprd/jam-p-r-d-hot-boy-wav',
+      // HOT BOY (https://soundcloud.com/jamprd/jam-p-r-d-hot-boy-wav) has embedding switched off on SoundCloud,
+      // so for now this plays his SoundCloud profile. Switch back once embedding is on, or use the MP3.
+      soundcloud: 'https://soundcloud.com/jamprd',
       // Leave blank to use the title from SoundCloud.
-      title: 'HOT BOY'
+      title: ''
     },
     soundcloudProfile: 'https://soundcloud.com/jamprd', // adds a "Listen on SoundCloud" link
     contactEmail: '',      // adds a Contact link to the footer
@@ -523,7 +525,13 @@
     });
     widget.bind(E.PLAY, onPlay);
     widget.bind(E.PAUSE, onPause);
-    widget.bind(E.FINISH, () => { widget.seekTo(0); widget.play(); });
+    widget.bind(E.FINISH, () => {
+      widget.getSounds(list => { if (!list || list.length <= 1) { widget.seekTo(0); widget.play(); } });
+    });
+    widget.bind(E.PLAY, () => {
+      widget.getCurrentSound(sound => { if (sound && sound.title && !CONFIG.track.title) setTitle(sound.title); });
+      widget.getDuration(d => { state.duration = d / 1000; });
+    });
     widget.bind(E.PLAY_PROGRESS, e => {
       state.position = e.currentPosition / 1000;
       if (!state.duration && e.relativePosition) state.duration = state.position / e.relativePosition;
