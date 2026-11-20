@@ -36,17 +36,26 @@ module.exports = async (req, res) => {
 
     let embeddable = null;
     let title = null;
+    let oembedStatus = null;
+    let widgetStatus = null;
     try {
-      const o = await fetch('https://soundcloud.com/oembed?format=json&url=' + encodeURIComponent(clean.toString()));
-      embeddable = o.ok;
+      const o = await fetch('https://soundcloud.com/oembed?format=json&url=' + encodeURIComponent(clean.toString()), { headers: { 'user-agent': 'Mozilla/5.0 (JAM PRD store)' } });
+      oembedStatus = o.status;
       if (o.ok) {
+        embeddable = true;
         const data = await o.json();
         title = data.title || null;
+      } else if (o.status === 403 || o.status === 404) {
+        embeddable = false;
       }
     } catch (_) { /* leave as unknown */ }
+    try {
+      const w = await fetch('https://w.soundcloud.com/player/?url=' + encodeURIComponent(clean.toString()), { headers: { 'user-agent': 'Mozilla/5.0 (JAM PRD store)' } });
+      widgetStatus = w.status;
+    } catch (_) { /* leave as unknown */ }
 
-    res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=604800');
-    return res.status(200).json({ url: clean.toString(), embeddable, title });
+    res.setHeader('Cache-Control', 's-maxage=3600');
+    return res.status(200).json({ url: clean.toString(), embeddable, title, oembedStatus, widgetStatus });
   } catch (_) {
     return res.status(502).json({ error: 'Could not reach SoundCloud' });
   }

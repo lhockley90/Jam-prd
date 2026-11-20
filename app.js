@@ -8,11 +8,11 @@
       // An MP3 plays on every phone and drives the live waveform.
       mp3: '',
       // Used when there is no MP3. Plays through SoundCloud's own player.
-      soundcloud: 'https://on.soundcloud.com/rtooJDZE9s1ztzEBpF',
+      soundcloud: 'https://soundcloud.com/jamprd/jam-p-r-d-hot-boy-wav',
       // Leave blank to use the title from SoundCloud.
-      title: ''
+      title: 'HOT BOY'
     },
-    soundcloudProfile: '', // e.g. 'https://soundcloud.com/jamprd' (adds a "Listen on SoundCloud" link)
+    soundcloudProfile: 'https://soundcloud.com/jamprd', // adds a "Listen on SoundCloud" link
     contactEmail: '',      // adds a Contact link to the footer
     checkoutEndpoint: ''   // becomes '/api/checkout' once Stripe and print-on-demand are connected
   };
@@ -488,7 +488,6 @@
     setStatus('LOADING');
     setTitle(CONFIG.track.title || 'Loading track…');
     const info = await resolveSoundcloud(CONFIG.track.soundcloud);
-    if (info.embeddable === false) { soundcloudFailed('embed'); return; }
     scFrame = document.createElement('iframe');
     scFrame.className = 'sc-frame';
     scFrame.title = 'SoundCloud player';
