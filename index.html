@@ -120,7 +120,6 @@
             <input class="seek" id="seek" type="range" min="0" max="1000" value="0" disabled>
             <span class="mono time" id="time">0:00 / 0:00</span>
           </div>
-          <div class="sc-slot" id="sc-slot"></div>
         </div>
       </div>
     </section>
@@ -212,6 +211,17 @@
       </div>
     </div>
   </dialog>
+
+  <!-- SoundCloud player. Stays out of sight; slides up when a phone needs a tap to start the music. -->
+  <div class="sc-dock" id="sc-dock">
+    <div class="sc-dock-head">
+      <span class="mono">Tap play to start the music</span>
+      <button class="icon-btn" id="sc-dock-close" type="button" aria-label="Hide player">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+      </button>
+    </div>
+    <div id="sc-frame-slot"></div>
+  </div>
 
   <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
 

@@ -335,7 +335,10 @@
   const audioEl = $('#audio');
   const state = { mode: 'none', ready: false, playing: false, wantPlay: false, duration: 0, position: 0, seeking: false };
   let actx = null, analyser = null, freqData = null, timeData = null;
-  let widget = null, scFrame = null, scFailTimer = null, scCheckTimer = null;
+  let widget = null, scFrame = null, scFailTimer = null, scCheckTimer = null, scUnlocked = false;
+  const dock = $('#sc-dock');
+  // iPhones and iPads won't start a hidden SoundCloud player until someone taps play on it once.
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   const soundToggle = $('#sound-toggle');
   const playBtn = $('#play-btn');
@@ -380,6 +383,10 @@
     playBtn.setAttribute('aria-label', 'Pause');
     heroListen.textContent = 'Pause the track';
     setStatus('PLAYING');
+    if (state.mode === 'sc') {
+      scUnlocked = true;
+      if (dock.classList.contains('is-open')) setTimeout(() => dock.classList.remove('is-open'), 1500);
+    }
   }
   function onPause() {
     state.playing = false;
@@ -414,8 +421,9 @@
       if (actx && actx.state === 'suspended') actx.resume();
       audioEl.play().catch(() => toast('Tap play to start the track'));
     } else if (state.mode === 'sc' && widget) {
+      if (isIOS && !scUnlocked) { revealSoundcloud(); return; }
       widget.play();
-      // Some phones block a hidden player. If it hasn't started, show SoundCloud's own player to tap.
+      // Some browsers block a hidden player. If it hasn't started, show SoundCloud's own player to tap.
       clearTimeout(scCheckTimer);
       scCheckTimer = setTimeout(() => { if (!state.playing) revealSoundcloud(); }, 2500);
     }
@@ -429,10 +437,10 @@
 
   function revealSoundcloud() {
     if (!scFrame) return;
-    scFrame.classList.remove('is-hidden');
-    setStatus('TAP PLAY BELOW');
-    toast('Tap play on the SoundCloud player');
+    dock.classList.add('is-open');
+    setStatus('TAP PLAY ON THE PLAYER');
   }
+  $('#sc-dock-close').addEventListener('click', () => dock.classList.remove('is-open'));
 
   function setupMp3() {
     state.mode = 'mp3';
@@ -450,29 +458,44 @@
     setStatus('READY');
   }
 
-  function soundcloudFailed() {
+  function soundcloudFailed(reason) {
     clearTimeout(scFailTimer);
     if (state.ready) return;
     state.mode = 'none';
     setControls(false);
-    setStatus('TRACK UNAVAILABLE');
+    dock.classList.remove('is-open');
+    setStatus(reason === 'embed' ? 'EMBEDDING TURNED OFF' : 'TRACK UNAVAILABLE');
     setTitle('Listen on SoundCloud');
     showSoundcloudLink(CONFIG.soundcloudProfile || CONFIG.track.soundcloud);
     $('#gate-note').textContent = 'Best with headphones';
   }
 
-  function setupSoundcloud() {
+  // SoundCloud's player doesn't accept short links (on.soundcloud.com), so the server turns them into the full address.
+  async function resolveSoundcloud(url) {
+    try {
+      if (new URL(url).hostname !== 'on.soundcloud.com') return { url };
+      const r = await fetch('/api/sc-resolve?url=' + encodeURIComponent(url));
+      if (!r.ok) throw new Error('resolve failed');
+      return await r.json();
+    } catch (_) {
+      return { url };
+    }
+  }
+
+  async function setupSoundcloud() {
     state.mode = 'sc';
     setControls(false);
     setStatus('LOADING');
     setTitle(CONFIG.track.title || 'Loading track…');
+    const info = await resolveSoundcloud(CONFIG.track.soundcloud);
+    if (info.embeddable === false) { soundcloudFailed('embed'); return; }
     scFrame = document.createElement('iframe');
-    scFrame.className = 'sc-frame is-hidden';
+    scFrame.className = 'sc-frame';
     scFrame.title = 'SoundCloud player';
     scFrame.allow = 'autoplay';
-    scFrame.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(CONFIG.track.soundcloud) +
+    scFrame.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(info.url) +
       '&color=%23d8201a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false';
-    $('#sc-slot').appendChild(scFrame);
+    $('#sc-frame-slot').appendChild(scFrame);
 
     const s = document.createElement('script');
     s.src = 'https://w.soundcloud.com/player/api.js';
