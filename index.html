@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JAM PRD — Official Store</title>
+  <meta name="description" content="JAM PRD Drop 01. Four pieces from the JAM PRD sound, printed when you order and shipped worldwide.">
+  <meta name="theme-color" content="#07070A">
+  <meta property="og:title" content="JAM PRD — Drop 01">
+  <meta property="og:description" content="Four pieces from the JAM PRD sound. Printed when you order, shipped worldwide.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Pirata+One&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Enter gate: browsers only allow sound after a tap, so the visitor chooses here -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="gate-grid" aria-hidden="true"></div>
+    <div class="gate-inner">
+      <p class="mono eyebrow">DROP 01 · PRINTED ON DEMAND</p>
+      <h1 class="chrome logo-xl" id="gate-title">JAM PRD</h1>
+      <div class="gate-actions">
+        <button class="btn btn-primary" id="enter-sound" type="button">
+          <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>Enter with sound</span>
+        </button>
+        <button class="btn btn-ghost" id="enter-muted" type="button">Enter muted</button>
+      </div>
+      <p class="mono gate-note" id="gate-note">Best with headphones</p>
+    </div>
+  </div>
+
+  <header class="site-header" id="top">
+    <div class="wrap header-row">
+      <a class="chrome logo-sm" href="#top" aria-label="JAM PRD home">JAM PRD</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#shop">Shop</a>
+        <a href="#sound">The Sound</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">Help</a>
+      </nav>
+      <div class="header-actions">
+        <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false">
+          <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="mono" id="sound-label">SOUND OFF</span>
+        </button>
+        <button class="bag-btn" id="bag-open" type="button" aria-label="Open bag">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span class="mono bag-count" id="bag-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <canvas class="viz" id="viz" aria-hidden="true"></canvas>
+      <div class="wrap hero-inner">
+        <p class="mono eyebrow"><span class="dot" aria-hidden="true"></span>DROP 01 · 4 PIECES · MADE TO ORDER</p>
+        <h2 class="chrome logo-hero" id="hero-title">JAM PRD</h2>
+        <div class="hero-foot">
+          <p class="lede">Four pieces from the JAM PRD sound. Printed when you order, shipped worldwide.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#shop">Shop the drop</a>
+            <button class="btn btn-ghost" id="hero-listen" type="button">Play the track</button>
+          </div>
+        </div>
+        <div class="now-playing mono" id="now-playing">
+          <span class="np-label">NOW PLAYING</span>
+          <span class="np-title" id="np-title">—</span>
+          <span class="np-bar" aria-hidden="true"><span id="np-fill"></span></span>
+          <span class="np-time" id="np-time">0:00</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>PL8S ONLY</span><b>✕</b><span>U WOT BLUD</span><b>✕</b><span>CRASH OUT</span><b>✕</b><span>DONT GET ME MAD</span><b>✕</b><span>WORLDWIDE</span><b>✕</b><span>NON-UPLOADED</span><b>✕</b>
+        <span>PL8S ONLY</span><b>✕</b><span>U WOT BLUD</span><b>✕</b><span>CRASH OUT</span><b>✕</b><span>DONT GET ME MAD</span><b>✕</b><span>WORLDWIDE</span><b>✕</b><span>NON-UPLOADED</span><b>✕</b>
+      </div>
+    </div>
+
+    <section class="section" id="shop" aria-labelledby="shop-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 class="h-display" id="shop-title">Drop 01</h2>
+          <p class="mono muted">04 PIECES · HEAVYWEIGHT COTTON · PRINTED TO ORDER</p>
+        </div>
+        <div class="grid" id="product-grid"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="sound" aria-labelledby="sound-title">
+      <div class="wrap sound-row">
+        <div class="sound-copy">
+          <p class="mono eyebrow">THE SOUND</p>
+          <h2 class="h-display" id="sound-title">Pl8s first.<br>Then the clothes.</h2>
+          <p class="body-lg">JAM PRD is a DJ and producer who has played sets all over the world. Dubplates, DJ tools and non-uploaded tunes. This drop takes the sound off the decks and onto cotton.</p>
+          <a class="text-link mono" id="soundcloud-link" href="#" hidden>LISTEN ON SOUNDCLOUD ↗</a>
+        </div>
+        <div class="player" id="player">
+          <div class="player-top">
+            <span class="mono muted">TRACK</span>
+            <span class="mono muted" id="player-status">NO TRACK LOADED</span>
+          </div>
+          <p class="player-title" id="player-title">Track coming soon</p>
+          <canvas class="player-viz" id="player-viz" aria-hidden="true"></canvas>
+          <div class="player-controls">
+            <button class="play-btn" id="play-btn" type="button" aria-label="Play" disabled>
+              <svg class="i-play" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5l11 7-11 7V5Z" fill="currentColor"/></svg>
+              <svg class="i-pause" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
+            </button>
+            <label class="sr-only" for="seek">Seek</label>
+            <input class="seek" id="seek" type="range" min="0" max="1000" value="0" disabled>
+            <span class="mono time" id="time">0:00 / 0:00</span>
+          </div>
+          <div class="sc-slot" id="sc-slot"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 class="h-display" id="how-title">How it works</h2>
+          <p class="mono muted">NO STOCK · NO WASTE</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <span class="mono step-no">01</span>
+            <h3>You order</h3>
+            <p>Pick your piece and size. Checkout is secure and takes a minute.</p>
+          </li>
+          <li>
+            <span class="mono step-no">02</span>
+            <h3>We print it for you</h3>
+            <p>Nothing sits in a warehouse. Your piece is printed after you order it, so allow a few extra days.</p>
+          </li>
+          <li>
+            <span class="mono step-no">03</span>
+            <h3>It ships to your door</h3>
+            <p>Shipped worldwide with tracking, sent to you as soon as it's printed.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="faq" aria-labelledby="faq-title">
+      <div class="wrap faq-row">
+        <h2 class="h-display" id="faq-title">Help</h2>
+        <div class="faq">
+          <details>
+            <summary>When will my order arrive?</summary>
+            <p>Each piece is printed to order, then shipped. You'll get a tracking link by email as soon as it's on its way.</p>
+          </details>
+          <details>
+            <summary>How do the tees fit?</summary>
+            <p>Unisex fit. If you're between sizes, or you want it oversized, go one size up.</p>
+          </details>
+          <details>
+            <summary>Can I return something?</summary>
+            <p>You can return unworn items within 14 days of delivery. If anything arrives damaged or misprinted, get in touch and we'll replace it.</p>
+          </details>
+          <details>
+            <summary>Do you ship outside the UK?</summary>
+            <p>Yes. We ship worldwide, and shipping is worked out at checkout.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <a class="chrome logo-md" href="#top">JAM PRD</a>
+      <nav class="footer-links mono" aria-label="Footer">
+        <a href="#shop">SHOP</a>
+        <a href="#sound">THE SOUND</a>
+        <a href="#faq">HELP</a>
+        <a id="contact-link" href="#" hidden>CONTACT</a>
+      </nav>
+      <p class="mono muted small">© <span id="year">2026</span> JAM PRD · PRINTED ON DEMAND</p>
+    </div>
+  </footer>
+
+  <!-- Product sheet -->
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-inner" id="sheet-inner"></div>
+  </dialog>
+
+  <!-- Bag drawer -->
+  <dialog class="drawer" id="drawer" aria-labelledby="drawer-title">
+    <div class="drawer-inner">
+      <div class="drawer-head">
+        <h2 id="drawer-title">Your bag</h2>
+        <button class="icon-btn" id="drawer-close" type="button" aria-label="Close bag">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+        </button>
+      </div>
+      <div class="drawer-items" id="drawer-items"></div>
+      <div class="drawer-foot">
+        <div class="subtotal"><span>Subtotal</span><span class="mono" id="subtotal">£0.00</span></div>
+        <p class="muted small">Shipping is worked out at checkout.</p>
+        <button class="btn btn-primary btn-block" id="checkout-btn" type="button">Checkout</button>
+        <p class="checkout-note small" id="checkout-note" role="status"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+
+  <audio id="audio" preload="none" loop></audio>
+  <script src="app.js"></script>
+</body>
+</html>
